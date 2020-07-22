@@ -1,0 +1,8 @@
+ambiente produção
+java -jar servidor.jar
+
+ambiente teste
+java -jar -Dspring.profiles.active=teste server.jar
+
+limpar dados do ambiente de teste
+localhost:8081/reset

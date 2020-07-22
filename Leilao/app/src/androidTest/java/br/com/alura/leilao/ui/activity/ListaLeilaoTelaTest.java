@@ -11,11 +11,11 @@ import org.junit.Test;
 public class ListaLeilaoTelaTest {
 
     @Rule
-    public ActivityTestRule activity = new ActivityTestRule(ListaLeilaoActivity.class, true, true);
+    public ActivityTestRule<ListaLeilaoActivity> activity = new ActivityTestRule(ListaLeilaoActivity.class, true, true);
 
     @Test
     public void deve_AparecerUmLeilao_QuandoCarregarUmLeilaoNaApi() {
-        Espresso.onView(ViewMatchers.withText("Casa")).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withText("Carro")).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 
 }
