@@ -6,6 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.theories.suppliers.TestedOn;
 
 import java.io.IOException;
 
@@ -44,4 +45,29 @@ public class ListaLeilaoTelaTest {
                 .check(matches(isDisplayed()));
     }
 
+    @Test
+    public void deve_AparecerDoisLeiloes_QuandoCarregarDoisLeiloesDaApi() throws IOException, InterruptedException {
+        TesteWebClient webClient = new TesteWebClient();
+
+        boolean bancoDeDadosNaoFoiLimpo = !webClient.limpaBancoDeDados();
+        if (bancoDeDadosNaoFoiLimpo) {
+            Assert.fail("Banco de dados não foi limpo");
+        }
+
+        Leilao carroSalvo = webClient.salva(new Leilao("Carro"));
+        Leilao computadorSalvo = webClient.salva(new Leilao("Computador"));
+        if (carroSalvo == null || computadorSalvo == null) {
+            Assert.fail("Leilão não foi salvo");
+        }
+
+        activity.launchActivity(new Intent());
+
+        Thread.sleep(1000);
+
+        onView(withText("Carro"))
+                .check(matches(isDisplayed()));
+
+        onView(withText("Computador"))
+                .check(matches(isDisplayed()));
+    }
 }
