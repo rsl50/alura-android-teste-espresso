@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import br.com.alura.leilao.api.retrofit.client.LeilaoWebClient;
+import br.com.alura.leilao.api.retrofit.client.TesteWebClient;
 import br.com.alura.leilao.model.Leilao;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -24,7 +24,7 @@ public class ListaLeilaoTelaTest {
 
     @Test
     public void deve_AparecerUmLeilao_QuandoCarregarUmLeilaoNaApi() throws IOException, InterruptedException {
-        LeilaoWebClient webClient = new LeilaoWebClient();
+        TesteWebClient webClient = new TesteWebClient();
 
         boolean bancoDeDadosNaoFoiLimpo = !webClient.limpaBancoDeDados();
         if (bancoDeDadosNaoFoiLimpo) {
