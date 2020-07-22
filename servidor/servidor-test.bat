@@ -1,0 +1,1 @@
+java -jar -Dspring.profiles.active=teste server.jar
