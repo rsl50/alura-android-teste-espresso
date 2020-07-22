@@ -1,8 +1,14 @@
 package br.com.alura.leilao.ui.activity;
 
 import android.content.Intent;
+import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,6 +19,7 @@ import java.io.IOException;
 
 import br.com.alura.leilao.R;
 import br.com.alura.leilao.api.retrofit.client.TesteWebClient;
+import br.com.alura.leilao.formatter.FormatadorDeMoeda;
 import br.com.alura.leilao.model.Leilao;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -26,6 +33,7 @@ public class ListaLeilaoTelaTest {
 
     private static final String ERRO_FALHA_LIMPEZA_DE_DADOS_DA_API = "Banco de dados não foi limpo";
     private static final String LEILAO_NAO_FOI_SALVO = "Leilão não foi salvo: ";
+    private final FormatadorDeMoeda formatadorDeMoeda = new FormatadorDeMoeda();
 
     @Rule
     public ActivityTestRule<ListaLeilaoActivity> activity = new ActivityTestRule(ListaLeilaoActivity.class, true, false);
@@ -45,9 +53,18 @@ public class ListaLeilaoTelaTest {
 
         Thread.sleep(1000);
 
-        onView(allOf(withText("Carro"),
-                withId(R.id.item_leilao_descricao)))
-                .check(matches(isDisplayed()));
+//        onView(allOf(withText("Carro"),
+//                withId(R.id.item_leilao_descricao)))
+//                .check(matches(isDisplayed()));
+//
+//        String formatoEsperado = formatadorDeMoeda.formata(0.00);
+//
+//        onView(allOf(withText(formatoEsperado),
+//                withId(R.id.item_leilao_maior_lance)))
+//                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.lista_leilao_recyclerview))
+                .check(matches(apareceLeilao(0, "Computador", 0.00)));
     }
 
     @Test
@@ -64,9 +81,43 @@ public class ListaLeilaoTelaTest {
                 withId(R.id.item_leilao_descricao)))
                 .check(matches(isDisplayed()));
 
+        String formatoEsperadoParaCarro = formatadorDeMoeda.formata(0.00);
+
+        onView(allOf(withText(formatoEsperadoParaCarro),
+                withId(R.id.item_leilao_maior_lance)))
+                .check(matches(isDisplayed()));
+
         onView(allOf(withText("Computador"),
                 withId(R.id.item_leilao_descricao)))
                 .check(matches(isDisplayed()));
+
+        String formatoEsperadoParaComputador = formatadorDeMoeda.formata(0.00);
+
+        onView(allOf(withText(formatoEsperadoParaComputador),
+                withId(R.id.item_leilao_maior_lance)))
+                .check(matches(isDisplayed()));
+    }
+
+    private Matcher<? super View> apareceLeilao(final int posicao, final String descricaoEsperada, final Double maiorLanceEsperado) {
+        return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
+            @Override
+            public void describeTo(Description description) {
+
+            }
+
+            @Override
+            protected boolean matchesSafely(RecyclerView item) {
+                View viewDoViewHolder = item.findViewHolderForAdapterPosition(posicao).itemView;
+
+                TextView textViewDaDescricao = viewDoViewHolder.findViewById(R.id.item_leilao_descricao);
+                boolean temDescricaoEsperada = textViewDaDescricao.getText().toString().equals(descricaoEsperada);
+
+                TextView textViewMaiorLance = viewDoViewHolder.findViewById(R.id.item_leilao_maior_lance);
+                boolean temMaiorLanceEsperado = textViewMaiorLance.getText().toString().equals(formatadorDeMoeda.formata(maiorLanceEsperado));
+
+                return temDescricaoEsperada && temMaiorLanceEsperado;
+            }
+        };
     }
 
     @After
