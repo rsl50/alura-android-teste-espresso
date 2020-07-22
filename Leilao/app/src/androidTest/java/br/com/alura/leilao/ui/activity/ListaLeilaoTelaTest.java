@@ -23,13 +23,22 @@ public class ListaLeilaoTelaTest {
     public ActivityTestRule<ListaLeilaoActivity> activity = new ActivityTestRule(ListaLeilaoActivity.class, true, false);
 
     @Test
-    public void deve_AparecerUmLeilao_QuandoCarregarUmLeilaoNaApi() throws IOException {
-        Leilao leilaoSalvo = new LeilaoWebClient().salva(new Leilao("Carro"));
+    public void deve_AparecerUmLeilao_QuandoCarregarUmLeilaoNaApi() throws IOException, InterruptedException {
+        LeilaoWebClient webClient = new LeilaoWebClient();
+
+        boolean bancoDeDadosNaoFoiLimpo = !webClient.limpaBancoDeDados();
+        if (bancoDeDadosNaoFoiLimpo) {
+            Assert.fail("Banco de dados não foi limpo");
+        }
+
+        Leilao leilaoSalvo = webClient.salva(new Leilao("Carro"));
         if (leilaoSalvo == null) {
             Assert.fail("Leilão não foi salvo");
         }
 
         activity.launchActivity(new Intent());
+
+        Thread.sleep(1000);
 
         onView(withText("Carro"))
                 .check(matches(isDisplayed()));
