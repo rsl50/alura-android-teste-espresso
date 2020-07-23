@@ -13,22 +13,17 @@ import java.io.IOException;
 
 import br.com.alura.leilao.R;
 import br.com.alura.leilao.api.retrofit.client.TesteWebClient;
-import br.com.alura.leilao.formatter.FormatadorDeMoeda;
 import br.com.alura.leilao.model.Leilao;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static br.com.alura.leilao.matchers.ViewMatcher.apareceLeilaoNaPosicao;
-import static org.hamcrest.Matchers.allOf;
 
 public class ListaLeilaoTelaTest {
 
     private static final String ERRO_FALHA_LIMPEZA_DE_DADOS_DA_API = "Banco de dados não foi limpo";
     private static final String LEILAO_NAO_FOI_SALVO = "Leilão não foi salvo: ";
-    private final FormatadorDeMoeda formatadorDeMoeda = new FormatadorDeMoeda();
 
     @Rule
     public ActivityTestRule<ListaLeilaoActivity> activity = new ActivityTestRule(ListaLeilaoActivity.class, true, false);
@@ -48,16 +43,6 @@ public class ListaLeilaoTelaTest {
 
         Thread.sleep(1000);
 
-//        onView(allOf(withText("Carro"),
-//                withId(R.id.item_leilao_descricao)))
-//                .check(matches(isDisplayed()));
-//
-//        String formatoEsperado = formatadorDeMoeda.formata(0.00);
-//
-//        onView(allOf(withText(formatoEsperado),
-//                withId(R.id.item_leilao_maior_lance)))
-//                .check(matches(isDisplayed()));
-
         onView(withId(R.id.lista_leilao_recyclerview))
                 .check(matches(apareceLeilaoNaPosicao(0, "Carro", 0.00)));
     }
@@ -72,7 +57,7 @@ public class ListaLeilaoTelaTest {
 
         Thread.sleep(1000);
 
-        onView(allOf(withText("Carro"),
+        /*onView(allOf(withText("Carro"),
                 withId(R.id.item_leilao_descricao)))
                 .check(matches(isDisplayed()));
 
@@ -90,7 +75,13 @@ public class ListaLeilaoTelaTest {
 
         onView(allOf(withText(formatoEsperadoParaComputador),
                 withId(R.id.item_leilao_maior_lance)))
-                .check(matches(isDisplayed()));
+                .check(matches(isDisplayed()));*/
+
+        onView(withId(R.id.lista_leilao_recyclerview))
+                .check(matches(apareceLeilaoNaPosicao(0, "Carro", 0.00)));
+
+        onView(withId(R.id.lista_leilao_recyclerview))
+                .check(matches(apareceLeilaoNaPosicao(1, "Computador", 0.00)));
     }
 
     @After
