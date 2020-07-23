@@ -1,14 +1,8 @@
 package br.com.alura.leilao.ui.activity;
 
 import android.content.Intent;
-import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.TextView;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,6 +21,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static br.com.alura.leilao.matchers.ViewMatcher.apareceLeilaoNaPosicao;
 import static org.hamcrest.Matchers.allOf;
 
 public class ListaLeilaoTelaTest {
@@ -64,7 +59,7 @@ public class ListaLeilaoTelaTest {
 //                .check(matches(isDisplayed()));
 
         onView(withId(R.id.lista_leilao_recyclerview))
-                .check(matches(apareceLeilao(0, "Computador", 0.00)));
+                .check(matches(apareceLeilaoNaPosicao(0, "Carro", 0.00)));
     }
 
     @Test
@@ -96,28 +91,6 @@ public class ListaLeilaoTelaTest {
         onView(allOf(withText(formatoEsperadoParaComputador),
                 withId(R.id.item_leilao_maior_lance)))
                 .check(matches(isDisplayed()));
-    }
-
-    private Matcher<? super View> apareceLeilao(final int posicao, final String descricaoEsperada, final Double maiorLanceEsperado) {
-        return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
-            @Override
-            public void describeTo(Description description) {
-
-            }
-
-            @Override
-            protected boolean matchesSafely(RecyclerView item) {
-                View viewDoViewHolder = item.findViewHolderForAdapterPosition(posicao).itemView;
-
-                TextView textViewDaDescricao = viewDoViewHolder.findViewById(R.id.item_leilao_descricao);
-                boolean temDescricaoEsperada = textViewDaDescricao.getText().toString().equals(descricaoEsperada);
-
-                TextView textViewMaiorLance = viewDoViewHolder.findViewById(R.id.item_leilao_maior_lance);
-                boolean temMaiorLanceEsperado = textViewMaiorLance.getText().toString().equals(formatadorDeMoeda.formata(maiorLanceEsperado));
-
-                return temDescricaoEsperada && temMaiorLanceEsperado;
-            }
-        };
     }
 
     @After
