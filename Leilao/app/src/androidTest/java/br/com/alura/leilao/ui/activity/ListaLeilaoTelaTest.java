@@ -105,4 +105,26 @@ public class ListaLeilaoTelaTest {
             Assert.fail(ERRO_FALHA_LIMPEZA_DE_DADOS_DA_API);
         }
     }
+
+
+    @Test
+    public void deve_AparecerUltimoLeilao_QuandoCarregarDezLeiloesDaApi() throws IOException {
+        tentaSalvarLeilaoNaApi(
+                new Leilao("Carro"),
+                new Leilao("Computador"),
+                new Leilao("TV"),
+                new Leilao("Notebook"),
+                new Leilao("Console"),
+                new Leilao("Jogo"),
+                new Leilao("Estante"),
+                new Leilao("Quadro"),
+                new Leilao("Smartphone"),
+                new Leilao("Casa"));
+
+            activity.launchActivity(new Intent());
+
+        onView(withId(R.id.lista_leilao_recyclerview))
+                .check(matches(apareceLeilaoNaPosicao(6, "Estante", 0.00)));
+
+    }
 }
