@@ -1,6 +1,7 @@
 package br.com.alura.leilao.ui.activity;
 
 import android.content.Intent;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.After;
@@ -36,26 +37,22 @@ public class ListaLeilaoTelaTest {
     }
 
     @Test
-    public void deve_AparecerUmLeilao_QuandoCarregarUmLeilaoNaApi() throws IOException, InterruptedException {
+    public void deve_AparecerUmLeilao_QuandoCarregarUmLeilaoNaApi() throws IOException {
          tentaSalvarLeilaoNaApi(new Leilao("Carro"));
 
         activity.launchActivity(new Intent());
-
-        Thread.sleep(1000);
 
         onView(withId(R.id.lista_leilao_recyclerview))
                 .check(matches(apareceLeilaoNaPosicao(0, "Carro", 0.00)));
     }
 
     @Test
-    public void deve_AparecerDoisLeiloes_QuandoCarregarDoisLeiloesDaApi() throws IOException, InterruptedException {
+    public void deve_AparecerDoisLeiloes_QuandoCarregarDoisLeiloesDaApi() throws IOException {
         tentaSalvarLeilaoNaApi(
                 new Leilao("Carro"),
                 new Leilao("Computador"));
 
         activity.launchActivity(new Intent());
-
-        Thread.sleep(1000);
 
         /*onView(allOf(withText("Carro"),
                 withId(R.id.item_leilao_descricao)))
@@ -121,9 +118,10 @@ public class ListaLeilaoTelaTest {
                 new Leilao("Smartphone"),
                 new Leilao("Casa"));
 
-            activity.launchActivity(new Intent());
+        activity.launchActivity(new Intent());
 
         onView(withId(R.id.lista_leilao_recyclerview))
+                .perform(RecyclerViewActions.scrollToPosition(9))
                 .check(matches(apareceLeilaoNaPosicao(9, "Casa", 0.00)));
 
     }
