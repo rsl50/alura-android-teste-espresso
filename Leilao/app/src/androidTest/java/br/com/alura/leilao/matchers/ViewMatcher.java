@@ -17,7 +17,7 @@ public class ViewMatcher {
 
     public static Matcher<? super View> apareceLeilaoNaPosicao(final int posicaoEsperada, final String descricaoEsperada, final Double maiorLanceEsperado) {
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
-            private Matcher<View> displayed = isDisplayed();
+            private final Matcher<View> displayed = isDisplayed();
             private final FormatadorDeMoeda formatador = new FormatadorDeMoeda();
             private final String maiorLanceFormatadoEsperado = formatador.formata(maiorLanceEsperado);
 
@@ -39,24 +39,24 @@ public class ViewMatcher {
                 }
 
                 View viewDoViewHolder = viewHolderDevolvido.itemView;
-                boolean temDescricaoEsperada = verificaDescricaoEsperada(viewDoViewHolder);
-                boolean temMaiorLanceEsperado = verificaMaiorLanceEsperado(viewDoViewHolder);
+                boolean temDescricaoEsperada = apareceDescricaoEsperada(viewDoViewHolder);
+                boolean temMaiorLanceEsperado = apareceMaiorLanceEsperado(viewDoViewHolder);
 
-                displayed = isDisplayed();
                 return temDescricaoEsperada &&
                         temMaiorLanceEsperado &&
-                        displayed.matches(viewDoViewHolder);
-                //isDisplayed().matches(viewDoViewHolder) garante teste para ver se a view está sendo exibida
+                        displayed.matches(viewDoViewHolder); //garante teste para ver se a view está sendo exibida
             }
 
-            private boolean verificaMaiorLanceEsperado(View viewDoViewHolder) {
+            private boolean apareceMaiorLanceEsperado(View viewDoViewHolder) {
                 TextView textViewMaiorLance = viewDoViewHolder.findViewById(R.id.item_leilao_maior_lance);
-                return textViewMaiorLance.getText().toString().equals(maiorLanceFormatadoEsperado);
+                return textViewMaiorLance.getText().toString().equals(maiorLanceFormatadoEsperado) &&
+                        displayed.matches(textViewMaiorLance);
             }
 
-            private boolean verificaDescricaoEsperada(View viewDoViewHolder) {
+            private boolean apareceDescricaoEsperada(View viewDoViewHolder) {
                 TextView textViewDaDescricao = viewDoViewHolder.findViewById(R.id.item_leilao_descricao);
-                return textViewDaDescricao.getText().toString().equals(descricaoEsperada);
+                return textViewDaDescricao.getText().toString().equals(descricaoEsperada) &&
+                        displayed.matches(textViewDaDescricao);
             }
         };
     }
