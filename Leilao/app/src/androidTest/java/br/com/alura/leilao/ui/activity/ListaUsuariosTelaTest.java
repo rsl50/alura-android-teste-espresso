@@ -1,8 +1,6 @@
 package br.com.alura.leilao.ui.activity;
 
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.After;
@@ -10,7 +8,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import br.com.alura.leilao.BuildConfig;
+import br.com.alura.leilao.BaseTesteIntegracao;
 import br.com.alura.leilao.R;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -25,7 +23,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
-public class ListaUsuariosTelaTest {
+public class ListaUsuariosTelaTest extends BaseTesteIntegracao {
 
     @Rule
     public ActivityTestRule<ListaLeilaoActivity> mainActivity = new ActivityTestRule<>(ListaLeilaoActivity.class);
@@ -67,10 +65,5 @@ public class ListaUsuariosTelaTest {
     @After
     public void teardown(){
         limpaBancoDeDadosInterno();
-    }
-
-    private void limpaBancoDeDadosInterno() {
-        Context appContext = InstrumentationRegistry.getTargetContext();
-        appContext.deleteDatabase(BuildConfig.BANCO_DE_DADOS);
     }
 }
