@@ -112,7 +112,7 @@ public class LanceLeilaoTelaTest extends BaseTesteIntegracao {
                         isDisplayed())));
 
         onView(withId(R.id.lances_leilao_maiores_lances))
-                .check(matches(allOf(withText("200.0 - (1) Robson\n"),
+                .check(matches(allOf(withText(formatador.formata(200) + " - (1) Robson\n"),
                         isDisplayed())));
     }
 
@@ -148,9 +148,42 @@ public class LanceLeilaoTelaTest extends BaseTesteIntegracao {
                         isDisplayed())));
 
         onView(withId(R.id.lances_leilao_maiores_lances))
-                .check(matches(allOf(withText("400.0 - (1) Robson\n" +
-                                "300.0 - (2) Fran\n" +
-                                "200.0 - (1) Robson\n"),
+                .check(matches(allOf(withText(formatador.formata(400) + " - (1) Robson\n" +
+                                formatador.formata(300) + " - (2) Fran\n" +
+                                formatador.formata(200) + " - (1) Robson\n"),
+                        isDisplayed())));
+    }
+
+    @Test
+    public void deve_atualizarLancesDoLeilao_QuandoReceberUmLanceMuitoAlto() throws IOException {
+        // Salvar leilão na API
+        tentaSalvarLeilaoNaApi(new Leilao("Carro"));
+
+        // Cria usuários manualmente
+        tentaSalvarUsuariosNoBancoDeDados(new Usuario("Robson"));
+
+        // Inicializar a main activity
+        mainActivity.launchActivity(new Intent());
+
+        // Clica no leilão
+        onView(withId(R.id.lista_leilao_recyclerview))
+                .perform(actionOnItemAtPosition(0, click()));
+
+        propoeNovoLance("2000000000", 1, "Robson");
+
+        // Fazer assertion para as views de maior e menor lance, e também, para os tres lances
+        FormatadorDeMoeda formatador = new FormatadorDeMoeda();
+
+        onView(withId(R.id.lances_leilao_maior_lance))
+                .check(matches(allOf(withText(formatador.formata(2000000000)),
+                        isDisplayed())));
+
+        onView(withId(R.id.lances_leilao_menor_lance))
+                .check(matches(allOf(withText(formatador.formata(2000000000)),
+                        isDisplayed())));
+
+        onView(withId(R.id.lances_leilao_maiores_lances))
+                .check(matches(allOf(withText(formatador.formata(2000000000) + " - (1) Robson\n"),
                         isDisplayed())));
     }
 
